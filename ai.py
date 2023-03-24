@@ -2,8 +2,6 @@
 import openai
 import streamlit as st
 
-openai.api_key = st.secrets['gpt_key']
-
 
 def create_prompt(user_params):
   prompt = f'Please provide itinerary for {user_params["location"]} during the month of {user_params["month"]} for {user_params["days"]} days. We need the following mix of activities {user_params["activities"]}. Suggest us restaurant options based on our interests in {user_params["food"]}'
@@ -54,7 +52,11 @@ def construct_sidebar_form():
 
 
 def main():
+  
+  #read the openai api key from secrets.toml
+  openai.api_key = st.secrets['gpt_key']
   submitted, user_params = construct_sidebar_form()
+  
   if submitted:
     prompt = create_prompt(user_params=user_params)
     response = get_data_from_openai(prompt=prompt)
